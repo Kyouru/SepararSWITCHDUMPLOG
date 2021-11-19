@@ -17,7 +17,7 @@ namespace SepararSWITCHDUMPLOG
                 string[] files = Directory.GetFiles(Directory.GetCurrentDirectory(), "524486*.dat", SearchOption.AllDirectories);
                 if (files.Length > 0)
                 {
-                    Console.WriteLine("Se encontró " + files.Length + "\nDesea procesarlos? ([Y]/N)");
+                    Console.WriteLine("Se encontró " + files.Length + " archivos validos.\nDesea procesarlos? ([Y]/N)");
                     string key = Console.ReadLine();
                     if (key != "N")
                     {
@@ -221,9 +221,25 @@ namespace SepararSWITCHDUMPLOG
                         {
                             dr[i] = "=\"" + lineas[j].Substring(pos + 2, 2) + "/" + lineas[j].Substring(pos, 2) + "/" + fecha.ToString("yyyy") + "\"";
                         }
-                        else if (i == 14)
+                        else if (i == 10 || i == 11 || i == 12)
+                        {
+                            dr[i] = "=\"" + (Double.Parse(lineas[j].Substring(pos, longitud[i]))/100).ToString("#,###,##0.00") + "\"";
+                        }
+                        else if (i == 14 || i == 18)
                         {
                             dr[i] = "=\"" + lineas[j].Substring(pos, 2) + ":" + lineas[j].Substring(pos + 2, 2) + ":" + lineas[j].Substring(pos + 4, 2) + "\"";
+                        }
+                        else if (i == 19 || i == 21 || i == 22 || i == 23)
+                        {
+                            dr[i] = "=\"" + lineas[j].Substring(pos + 2, 2) + "/" + lineas[j].Substring(pos, 2) + "\"";
+                        }
+                        else if (i == 8)
+                        {
+                            dr[i] = "=\"" + lineas[j].Substring(pos + 3, longitud[i] - 3) + "\"";
+                        }
+                        else if (i == 20)
+                        {
+                            dr[i] = "=\"" + lineas[j].Substring(pos, 2) + "/" + lineas[j].Substring(pos + 2, 2) + "\"";
                         }
                         else if (i == 7)
                         {
