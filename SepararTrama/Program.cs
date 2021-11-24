@@ -12,11 +12,47 @@ namespace SepararSWITCHDUMPLOG
 {
     class Program
     {
+        public static string fechaarchivo = "";
+
         static void Main(string[] args)
         {
+            if (!Directory.Exists(Directory.GetCurrentDirectory() + "\\INPUT"))
+            {
+                try
+                {
+                    Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\INPUT");
+                }
+                catch
+                {
+
+                }
+            }
+
+            if (!Directory.Exists(Directory.GetCurrentDirectory() + "\\PROCESADO"))
+            {
+                try
+                {
+                    Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\PROCESADO");
+                }
+                catch
+                {
+
+                }
+            }
+            if (!Directory.Exists(Directory.GetCurrentDirectory() + "\\OUTPUT"))
+            {
+                try
+                {
+                    Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\OUTPUT");
+                }
+                catch
+                {
+
+                }
+            }
             if (args.Length == 0)
             {
-                string[] files = Directory.GetFiles(Directory.GetCurrentDirectory(), "524486*.dat", SearchOption.AllDirectories);
+                string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + "\\INPUT", "524486*.dat", SearchOption.AllDirectories);
                 if (files.Length > 0)
                 {
                     Console.WriteLine("Se encontró " + files.Length + " archivos validos.\nDesea procesarlos? ([Y]/N)");
@@ -26,12 +62,13 @@ namespace SepararSWITCHDUMPLOG
                         foreach (string file in files)
                         {
                             procesarArchivo(file);
+                            File.Move(file, Directory.GetCurrentDirectory() + "\\PROCESADO\\" + Path.GetFileNameWithoutExtension(file) + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetExtension(file));
                         }    
                     }
                 }
                 else
                 {
-                    Console.WriteLine("No se encontró archivos validos en la ruta " + Directory.GetCurrentDirectory());
+                    Console.WriteLine("No se encontró archivos validos en la ruta " + Directory.GetCurrentDirectory() + "\\INPUT");
                 }
             }
             else
@@ -217,6 +254,7 @@ namespace SepararSWITCHDUMPLOG
                 if (lineas[j].StartsWith("A"))
                 {
                     fecha = DateTime.Parse("20"+lineas[j].Substring(24, 2) + "-" + lineas[j].Substring(26, 2) + "-" + lineas[j].Substring(28, 2));
+                    fechaarchivo = fecha.ToString("yyyyMMdd");
                 }
                 else if (lineas[j].StartsWith("B"))
                 {
@@ -452,7 +490,7 @@ namespace SepararSWITCHDUMPLOG
         public static void ExportarDataTableCSV(DataTable dt, string name)
         {
             
-            string fileName = Directory.GetCurrentDirectory() + "\\" + Path.GetFileNameWithoutExtension(name) + ".csv";
+            string fileName = Directory.GetCurrentDirectory() + "\\OUTPUT\\" + Path.GetFileNameWithoutExtension(name) + "_" + fechaarchivo + ".csv";
 
             int cols;
 
